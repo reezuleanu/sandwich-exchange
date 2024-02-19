@@ -1,7 +1,7 @@
 import requests
 import sys
 
-sys.path.append("../server")
+sys.path.append("../")
 from server.models import Sandwich
 
 api_url = "http://127.0.0.1:2727"
