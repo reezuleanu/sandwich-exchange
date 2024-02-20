@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask with Dash Graph</title>
+    <style>
+        /* Center the div */
+        .centered {
+            text-align: center;
+            margin: auto;
+            width: 50%;
+            padding: 10px;
+            justify-content: center;
+        }
+    </style>
+</head>
+<header style="background-color: #424242;color: white;text-align: left;border-radius: 20px;">SANDWICH EXCHANGE</header>
+<body>
+    <h1 style="text-align: center;">{{context}}</h1>
+    <p style="text-align: center;">{{context2}}</p>
+    <div style="border-radius: 20px; background-color: #424242;display: flex; justify-content: center;">
+        <!-- Embed the Dash app graph using iframe -->
+        <iframe src="/dash/sandwiches/"  height = "420" frameBorder="0" scrolling = "no" width = "45%"></iframe>
+    </div>
+</body>
+</html>

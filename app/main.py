@@ -1,75 +1,30 @@
 from dash import Dash
-from dash import html, dcc
-from plotly import graph_objs as go
-from datetime import datetime
-from pandas_datareader import data as pdr
-import yfinance as yf
+from dash import html
+import sys
+from flask import Flask, render_template
+from dash_apps.app1 import setup_layout
 
-yf.pdr_override()
-
-
-app = Dash(name=__name__)
-
-start = datetime(2020, 1, 1)
-end = datetime.now()
-
-data = pdr.get_data_yahoo("GOOG", start, end)
-data_tesla = pdr.get_data_yahoo("TSLA", start, end)
+sys.path.append("../")
 
 
-app.layout = html.Div(
-    [
-        html.H1(
-            "WELCOME TO THE SANDWICH EXCHANGE",
-            style={"text-align": "center"},
-        ),
-        html.Div(
-            "This is a Stock Exchange, but for sandwiches. Neat, huh.",
-            style={"text-align": "center"},
-        ),
-        dcc.Graph(
-            id="google-graph",
-            figure={
-                "data": [
-                    go.Candlestick(
-                        x=data.index,
-                        open=data.Open,
-                        high=data.High,
-                        low=data.Low,
-                        close=data.Close,
-                    )
-                ],
-                "layout": go.Layout(
-                    # title="Google Chart Example",
-                    title="Subway Footlong",
-                    xaxis=dict(title="Date"),
-                    yaxis=dict(title="Price"),
-                ),
-            },
-        ),
-        dcc.Graph(
-            id="tesla-graph",
-            figure={
-                "data": [
-                    go.Candlestick(
-                        x=data_tesla.index,
-                        open=data_tesla.Open,
-                        high=data_tesla.High,
-                        low=data_tesla.Low,
-                        close=data_tesla.Close,
-                    )
-                ],
-                "layout": go.Layout(
-                    # title="Tesla Chart Example",
-                    title="McDonald's McRib",
-                    xaxis=dict(title="Date"),
-                    yaxis=dict(title="Price"),
-                ),
-            },
-        ),
-    ]
-)
+app = Flask("flask_server")
+
+
+app1 = Dash(server=app, url_base_pathname="/dash/sandwiches/")
+app1.layout = setup_layout(app1)
+
+
+@app.route("/")
+def index() -> dict:
+    return {"respone": "hello!"}
+
+
+@app.route("/sandwiches/")
+def app1() -> html:
+    return render_template(
+        "index.html", context="Hello There!", context2="This is all rendered by flask"
+    )
 
 
 if __name__ == "__main__":
-    app.run_server(debug=True)
+    app.run(debug=True)
