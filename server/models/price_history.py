@@ -5,6 +5,10 @@ from typing import List
 from random import randint, choice
 
 
+def adjust() -> dict:
+    pass
+
+
 class Price_history(BaseModel):
     """Dataclass for the history of prices (candlestick graph format)"""
 
@@ -19,7 +23,7 @@ class Price_history(BaseModel):
         cls,
         start_date: datetime,
         end_date: datetime,
-        initial_price: int | None = 1000,
+        initial_price: int | None = 10,
         volatility: int | None = None,
     ) -> Price_history:
         """Function which generates sandwich stock price history
@@ -77,7 +81,8 @@ class Price_history(BaseModel):
 
         # only show data for as far back as a month when showing every 15 minutes
         # prevents the graph from being a laggy mess
-        cutoff = 4 * 24 * 31
+
+        cutoff = 4 * 24 * 31  # one month
 
         # check if there's enough data to cut from
         if len(self.x) < cutoff:
@@ -101,7 +106,8 @@ class Price_history(BaseModel):
 
         # only show data for as far back as a month when showing every 15 minutes
         # prevents the graph from being a laggy mess
-        cutoff = 24 * 365
+
+        cutoff = 24 * 365  # one year
 
         # check if there's enough data to cut from
         if len(self.x) < cutoff * 4:
