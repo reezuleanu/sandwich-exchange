@@ -4,31 +4,34 @@ from datetime import datetime
 from pandas_datareader import data as pdr
 import yfinance as yf
 
+import sys
+
+sys.path.append("../")
+from server.models import Sandwich, Price_history
+
 
 def setup_layout(app: Dash) -> html.Div:
-    start = datetime(2020, 1, 1)
+    # start = datetime(2020, 1, 1)
+    start = datetime(2024, 1, 1)
     end = datetime.now()
 
     yf.pdr_override()
 
-    data = pdr.get_data_yahoo("GOOG", start, end)
+    # data = pdr.get_data_yahoo("GOOG", start, end)
+
+    sandwich = Sandwich(
+        name="KFC's Double Booster",
+        price_history=Price_history.generate_history(start, end),
+    )
 
     layout = html.Div(
         [
             dcc.Graph(
                 id="google-graph",
                 figure={
-                    "data": [
-                        go.Candlestick(
-                            x=data.index,
-                            open=data.Open,
-                            high=data.High,
-                            low=data.Low,
-                            close=data.Close,
-                        )
-                    ],
+                    "data": [go.Candlestick(sandwich.price_history.by_hour())],
                     "layout": go.Layout(
-                        title="Subway Footlong",
+                        title=sandwich.name,
                         xaxis=dict(title="Date"),
                         yaxis=dict(title="Price"),
                         plot_bgcolor="#424230",
