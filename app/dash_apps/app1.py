@@ -12,7 +12,7 @@ from server.models import Sandwich, Price_history
 
 def setup_layout(app: Dash) -> html.Div:
     # start = datetime(2020, 1, 1)
-    start = datetime(2024, 1, 1)
+    start = datetime(2020, 1, 1)
     end = datetime.now()
 
     yf.pdr_override()
@@ -41,8 +41,14 @@ def setup_layout(app: Dash) -> html.Div:
                         width=700,
                     ),
                 },
+                style={"margin-left": "25vw"},
             ),
         ],
+        style={
+            "background-color": "blue",
+            "border-radius": "20px",
+            "margin-top": "25vh",
+        },
     )
 
     return layout

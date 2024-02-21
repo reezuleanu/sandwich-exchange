@@ -37,11 +37,11 @@ class Price_history(BaseModel):
         if volatility == None:
             volatility = initial_price // 10
 
-        indexes = int((end_date - start_date) / timedelta(minutes=15))
+        indexes = int((end_date - start_date) / timedelta(minutes=15)) + 1
 
         # generate indexes
         x = []
-        for i in range(indexes + 1):
+        for i in range(indexes):
             x.append(start_date + timedelta(minutes=15) * i)
 
         # generate initial data from which to generate further
@@ -77,18 +77,18 @@ class Price_history(BaseModel):
 
         # only show data for as far back as a month when showing every 15 minutes
         # prevents the graph from being a laggy mess
-        cutoff = 4 * 24 * 30
+        cutoff = 4 * 24 * 31
 
         # check if there's enough data to cut from
-        if len(self.x) < cutoff * 4:
+        if len(self.x) < cutoff:
             cutoff = 0
 
         return dict(
-            x=self.x[cutoff:],
-            open=self.open[cutoff:],
-            close=self.close[cutoff:],
-            low=self.low[cutoff:],
-            high=self.high[cutoff:],
+            x=self.x[cutoff * -1 :],
+            open=self.open[cutoff * -1 :],
+            close=self.close[cutoff * -1 :],
+            low=self.low[cutoff * -1 :],
+            high=self.high[cutoff * -1 :],
         )
 
     def by_hour(self) -> dict:
@@ -114,12 +114,12 @@ class Price_history(BaseModel):
                 close.append(self.close[i * 4 + 3])
             except IndexError:
                 close.append(self.close[-1])
-            high.append(max([high for high in self.high[i * 4 : i * 4 + 3]]))
-            low.append(min([low for low in self.low[i * 4 : i * 4 + 3]]))
+            high.append(max([high for high in self.high[i * 4 : i * 4 + 4]]))
+            low.append(min([low for low in self.low[i * 4 : i * 4 + 4]]))
         return dict(
-            x=x[cutoff:],
-            open=open_list[cutoff:],
-            close=close[cutoff:],
-            high=high[cutoff:],
-            low=low[cutoff:],
+            x=x[cutoff * -1 :],
+            open=open_list[cutoff * -1 :],
+            close=close[cutoff * -1 :],
+            high=high[cutoff * -1 :],
+            low=low[cutoff * -1 :],
         )
