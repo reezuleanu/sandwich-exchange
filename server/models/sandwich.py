@@ -7,7 +7,17 @@ class Sandwich(BaseModel):
 
     name: str
 
+    # optional sandwich description
+    description: str | None = None
+
+    # price history in a candlestick format
     price_history: Price_history | None = None
+
+    # total stocks
+    volume: int | None = 0
+
+    # total available
+    on_sale: int | None = volume
 
     @property
     def price(self) -> int:

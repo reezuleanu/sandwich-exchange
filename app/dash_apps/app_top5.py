@@ -9,11 +9,12 @@ from typing import List
 sys.path.append("../")
 from server.models import Sandwich, Price_history
 
+# ! THESE ARE PARAMETERS FOR GENERATING PRICE HISTORY, TO BE MOVED
 start = datetime(2020, 1, 1)
 end = datetime.now()
 
 
-# function to generate sandwiches before i have them in the db
+# function to generate sandwiches before i fully implement the database in the app
 def generate_sandwiches() -> List[Sandwich]:
     sandwich1 = Sandwich(
         name="KFC's Double Booster",
@@ -44,17 +45,16 @@ def generate_sandwiches() -> List[Sandwich]:
 def sandwich_div(
     sandwich: Sandwich, height: int | None = 350, width: int | None = 450
 ) -> html.Div:
+    """This function should not be used outside of this module"""
 
-    div = dbc.Col(
+    div = html.Div(
         [
             # html.Div(
             #     sandwich1.name,
             #     style={"align-text": "center", "color": "white"},
             #     id="sandwich-1",
             # ),
-            plot_candle_data(
-                sandwich, intervals="quarters", height=height, width=width
-            ),
+            plot_candle_data(sandwich, intervals="week", height=height, width=width),
             html.Div(id=f"{sandwich.name}-redirect-div"),
         ],
         style={
@@ -75,9 +75,9 @@ def sandwich_div(
 
 
 # sandwich div generation ( first one is special so it's not part of the loop)
-sandwiches = generate_sandwiches()
 
 divs = []
+sandwiches = generate_sandwiches()
 
 divs.append(sandwich_div(sandwiches[0], width=1000))
 
@@ -94,6 +94,8 @@ divs.append(sandwich_div(sandwiches[0], width=1000))
 
 
 for sandwich in sandwiches[1::]:
+
+    # rest of the sandwiches
     divs.append(sandwich_div(sandwich))
 
     # @callback(
@@ -108,7 +110,8 @@ for sandwich in sandwiches[1::]:
 
 
 # generate app layout
-def setup_layout(app: Dash) -> html.Div:
+def setup_layout() -> html.Div:
+    """Function which generates the layout for the Top 5 Sandwiches Dash app"""
 
     layout = html.Div(
         [

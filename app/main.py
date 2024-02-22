@@ -1,27 +1,30 @@
 from dash import Dash, html
-import dash_bootstrap_components as dbc
 import sys
 from flask import Flask, render_template
 from dash_apps.app_top5 import setup_layout
 
 sys.path.append("../")
 
+# initiate server
+app = Flask("Sandwich-Exchange-Server")
 
-app = Flask("flask_server")
-
-
+# initiate dash apps
 app1 = Dash(server=app, url_base_pathname="/dash/sandwiches/")
-app1.layout = setup_layout(app1)
+
+# this takes no arguments, so i can initiate it here
+app1.layout = setup_layout()
 
 
+# homepage
 @app.route("/")
 def index() -> html:
-    return render_template("template.html", username="reezuleanu", balance=10000)
+    return render_template("index.html", username="reezuleanu", balance=10000)
 
 
+# user info page
 @app.route("/user/")
 def user() -> html:
-    pass
+    return "WIP"
 
 
 if __name__ == "__main__":

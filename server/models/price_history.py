@@ -5,8 +5,50 @@ from typing import List
 from random import randint, choice
 
 
-def adjust() -> dict:
-    pass
+def adjust(self, intervals: str, cutoff: int) -> dict:
+    """Candlestick graph index interval adjustment script. Should not
+    be used outside this module"""
+
+    x = []
+    open_list = []
+    close = []
+    high = []
+    low = []
+
+    # define interval as amount of quarters of hour
+    match intervals:
+        case "hour":
+            intervals = 4
+        case "day":
+            intervals = 4 * 24
+        case "week":
+            intervals = 4 * 24 * 7
+
+    # check if there's less data then the cutoff
+    if len(self.x) < cutoff * intervals:
+        cutoff = 0
+
+    # format data around the interval
+    for i in range(len(self.x) // intervals):
+        x.append(self.x[i * intervals])
+        open_list.append(self.open[i * intervals])
+        try:
+            close.append(self.close[i * intervals + intervals - 1])
+        except IndexError:
+            close.append(self.close[-1])
+        high.append(
+            max([high for high in self.high[i * intervals : i * intervals + intervals]])
+        )
+        low.append(
+            min([low for low in self.low[i * intervals : i * intervals + intervals]])
+        )
+    return dict(
+        x=x[cutoff * -1 :],
+        open=open_list[cutoff * -1 :],
+        close=close[cutoff * -1 :],
+        high=high[cutoff * -1 :],
+        low=low[cutoff * -1 :],
+    )
 
 
 class Price_history(BaseModel):
@@ -33,9 +75,6 @@ class Price_history(BaseModel):
             end_date (datetime): up to what point (usually present)
             initial_price (int | None, optional): Initial stock price. Defaults to 1000.
             volatility (int | None, optional): Volatility (how much the price changes). Defaults to None.
-
-        Returns:
-            Price_history: _description_
         """
 
         if volatility == None:
@@ -77,14 +116,16 @@ class Price_history(BaseModel):
         return cls(x=x, open=open_list, low=low, high=high, close=close)
 
     def by_quarters(self) -> dict:
-        """Provide graph data, adjusted by every 15 minutes"""
+        """Provide graph data, adjusted by every 15 minutes
+        There are no changes done, just provides all object data as
+        a dictionary for easier use with graphs"""
 
         # only show data for as far back as a month when showing every 15 minutes
         # prevents the graph from being a laggy mess
 
         cutoff = 4 * 24 * 31  # one month
 
-        # check if there's enough data to cut from
+        # check if there's less data than the cutoff
         if len(self.x) < cutoff:
             cutoff = 0
 
@@ -98,34 +139,24 @@ class Price_history(BaseModel):
 
     def by_hour(self) -> dict:
         """Provide graph data, adjusted by every hour"""
-        x = []
-        open_list = []
-        close = []
-        high = []
-        low = []
 
-        # only show data for as far back as a month when showing every 15 minutes
-        # prevents the graph from being a laggy mess
+        # cutoff of one year
+        cutoff = 24 * 365
 
-        cutoff = 24 * 365  # one year
+        return adjust(self, "hour", cutoff)
 
-        # check if there's enough data to cut from
-        if len(self.x) < cutoff * 4:
-            cutoff = 0
+    def by_day(self) -> dict:
+        """Provide graph data, adjusted by every day"""
 
-        for i in range(len(self.x) // 4):
-            x.append(self.x[i * 4])
-            open_list.append(self.open[i * 4])
-            try:
-                close.append(self.close[i * 4 + 3])
-            except IndexError:
-                close.append(self.close[-1])
-            high.append(max([high for high in self.high[i * 4 : i * 4 + 4]]))
-            low.append(min([low for low in self.low[i * 4 : i * 4 + 4]]))
-        return dict(
-            x=x[cutoff * -1 :],
-            open=open_list[cutoff * -1 :],
-            close=close[cutoff * -1 :],
-            high=high[cutoff * -1 :],
-            low=low[cutoff * -1 :],
-        )
+        # cutoff of 5 years
+        cutoff = 365 * 5
+
+        return adjust(self, "day", cutoff)
+
+    def by_week(self) -> dict:
+        """Provide graph data, adjusted by every week"""
+
+        # cutoff of 10 years
+        cutoff = 365 // 7 * 10
+
+        return adjust(self, "week", cutoff)

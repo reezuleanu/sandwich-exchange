@@ -3,6 +3,7 @@ from uuid import UUID, uuid4, uuid5
 from pydantic import BaseModel
 
 
+# todo change this so it can be used to authentificate users on the web app as well
 class Token(BaseModel):
     """Data class for API tokens (currently only used by the web app, could implement a way
     to let people create their own tokens and make their own tools and websites with the
