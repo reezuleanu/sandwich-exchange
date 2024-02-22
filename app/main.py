@@ -1,5 +1,5 @@
-from dash import Dash
-from dash import html
+from dash import Dash, html
+import dash_bootstrap_components as dbc
 import sys
 from flask import Flask, render_template
 from dash_apps.app_top5 import setup_layout
@@ -15,16 +15,14 @@ app1.layout = setup_layout(app1)
 
 
 @app.route("/")
-def index() -> dict:
-    return {"respone": "hello!"}
+def index() -> html:
+    return render_template("template.html", username="reezuleanu", balance=10000)
 
 
-@app.route("/sandwiches/")
-def app1() -> html:
-    return render_template(
-        "index.html", context="Hello There!", context2="This is all rendered by flask"
-    )
+@app.route("/user/")
+def user() -> html:
+    pass
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="192.168.0.223", port=80, debug=True)

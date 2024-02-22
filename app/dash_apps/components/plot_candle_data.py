@@ -7,30 +7,30 @@ sys.path.append("../")
 from server.models import Sandwich
 
 
-def plot_data(
+def plot_candle_data(
     sandwich: Sandwich,
-    id: str,
+    id: str | None = "",
     height: int | None = 400,
     width: int | None = 600,
-    timeframe: str | None = "hour",
+    intervals: str | None = "hour",
 ) -> dcc.Graph:
 
-    match timeframe:
+    match intervals:
         case "quarters":
-            timeframe = sandwich.price_history.by_quarters()
+            intervals = sandwich.price_history.by_quarters()
         case "hour":
-            timeframe = sandwich.price_history.by_hour()
+            intervals = sandwich.price_history.by_hour()
 
     layout = dcc.Graph(
         id=id,
         figure={
-            "data": [go.Candlestick(timeframe)],
+            "data": [go.Candlestick(intervals)],
             "layout": go.Layout(
                 title=sandwich.name,
                 xaxis=dict(title="Date"),
                 yaxis=dict(title="Price"),
-                plot_bgcolor="#424230",
-                paper_bgcolor="#424242",
+                plot_bgcolor="#181a1f",
+                paper_bgcolor="#22252f",
                 font={"color": "WHITE"},
                 height=height,
                 width=width,

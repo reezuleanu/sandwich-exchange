@@ -1,18 +1,20 @@
-from dash import Dash, html, dcc
+from dash import Dash, html, dcc, Input, Output, callback
+import dash_bootstrap_components as dbc
 from plotly import graph_objects as go
 from datetime import datetime
-from dash_apps.components.plot_data import plot_data
+from dash_apps.components.plot_candle_data import plot_candle_data
 import sys
+from typing import List
 
 sys.path.append("../")
 from server.models import Sandwich, Price_history
 
+start = datetime(2020, 1, 1)
+end = datetime.now()
 
-def setup_layout(app: Dash) -> html.Div:
-    # start = datetime(2020, 1, 1)
-    start = datetime(2020, 1, 1)
-    end = datetime.now()
 
+# function to generate sandwiches before i have them in the db
+def generate_sandwiches() -> List[Sandwich]:
     sandwich1 = Sandwich(
         name="KFC's Double Booster",
         price_history=Price_history.generate_history(start, end),
@@ -23,101 +25,119 @@ def setup_layout(app: Dash) -> html.Div:
         price_history=Price_history.generate_history(start, end),
     )
 
-    div1 = html.Div(
-        plot_data(sandwich1, "plot 1", timeframe="quarters", height=350, width=1000),
+    sandwich3 = Sandwich(
+        name="Wendy's Spicy Chicken Sandwich",
+        price_history=Price_history.generate_history(start, end),
+    )
+    sandwich4 = Sandwich(
+        name="Splatoon 3's Crab Trap Sandwich",
+        price_history=Price_history.generate_history(start, end),
+    )
+    sandwich5 = Sandwich(
+        name="Skibidi Toilet Sandwich",
+        price_history=Price_history.generate_history(start, end),
+    )
+    return [sandwich1, sandwich2, sandwich3, sandwich4, sandwich5]
+
+
+# function to generate an appropriate sandwich graph div for the app
+def sandwich_div(
+    sandwich: Sandwich, height: int | None = 350, width: int | None = 450
+) -> html.Div:
+
+    div = dbc.Col(
+        [
+            # html.Div(
+            #     sandwich1.name,
+            #     style={"align-text": "center", "color": "white"},
+            #     id="sandwich-1",
+            # ),
+            plot_candle_data(
+                sandwich, intervals="quarters", height=height, width=width
+            ),
+            html.Div(id=f"{sandwich.name}-redirect-div"),
+        ],
         style={
-            "background-color": "#424242",
+            "background-color": "#22252f",
             "display": "flex",
             "justify-content": "center",
             "align-items": "center",
             "border": "white solid 2px",
             "border-radius": "20px",
-            "height": "360px",
-            "width": "1100px",
+            "height": f"{height+10}px",
+            "width": f"{width+50}px",
             "margin": "10px",
         },
+        id=f"{sandwich.name}",
     )
 
-    div2 = html.Div(
-        plot_data(sandwich2, "plot 2", timeframe="quarters", height=350, width=450),
-        style={
-            "background-color": "#424242",
-            "display": "flex",
-            "justify-content": "center",
-            "align-items": "center",
-            "border": "white solid 2px",
-            "border-radius": "20px",
-            "height": "360px",
-            "width": "500px",
-            "margin": "10px",
-        },
-    )
+    return div
 
-    div3 = html.Div(
-        plot_data(sandwich2, "plot 3", timeframe="quarters", height=350, width=450),
-        style={
-            "background-color": "#424242",
-            "display": "flex",
-            "justify-content": "center",
-            "align-items": "center",
-            "border": "white solid 2px",
-            "border-radius": "20px",
-            "height": "360px",
-            "width": "500px",
-            "margin": "10px",
-        },
-    )
 
-    div4 = html.Div(
-        plot_data(sandwich2, "plot 4", timeframe="quarters", height=350, width=450),
-        style={
-            "background-color": "#424242",
-            "display": "flex",
-            "justify-content": "center",
-            "align-items": "center",
-            "border": "white solid 2px",
-            "border-radius": "20px",
-            "height": "360px",
-            "width": "500px",
-            "margin": "10px",
-        },
-    )
+# sandwich div generation ( first one is special so it's not part of the loop)
+sandwiches = generate_sandwiches()
 
-    div5 = html.Div(
-        plot_data(sandwich2, "plot 5", timeframe="quarters", height=350, width=450),
-        style={
-            "background-color": "#424242",
-            "display": "flex",
-            "justify-content": "center",
-            "align-items": "center",
-            "border": "white solid 2px",
-            "border-radius": "20px",
-            "height": "360px",
-            "width": "500px",
-            "margin": "10px",
-        },
-    )
+divs = []
+
+divs.append(sandwich_div(sandwiches[0], width=1000))
+
+# ! DISABLED CALLBACKS BECAUSE OF BUG WITH IFRAME
+# @callback(
+#     Output(f"{sandwiches[0].name}-redirect-div", "children"),
+#     [Input(sandwiches[0].name, "n_clicks")],
+# )
+# def redirect_user(n_clicks):
+#     if n_clicks > 0:
+#         return dcc.Location(pathname="/", id="redirect")
+#     else:
+#         return 0
+
+
+for sandwich in sandwiches[1::]:
+    divs.append(sandwich_div(sandwich))
+
+    # @callback(
+    #     Output(f"{sandwich.name}-redirect-div", "children"),
+    #     [Input(sandwich.name, "n_clicks")],
+    # )
+    # def redirect_user(n_clicks):
+    #     if n_clicks > 0:
+    #         return dcc.Location(pathname="/", id="redirect")
+    #     else:
+    #         return 0
+
+
+# generate app layout
+def setup_layout(app: Dash) -> html.Div:
 
     layout = html.Div(
         [
-            html.H1(
-                "these are the top 5 sandwiches on the platform",
-                style={"text-align": "center", "color": "white"},
-            ),
-            html.Div([div1], style={"display": "flex", "justify-content": "center"}),
-            html.Div(
-                [div2, div3], style={"display": "flex", "justify-content": "center"}
-            ),
-            html.Div(
-                [div4, div5], style={"display": "flex", "justify-content": "center"}
-            ),
+            # tried using bootstrap, doesn't really work, maybe because of the iframe
+            dbc.Container(
+                [
+                    dbc.Row(
+                        html.H1(
+                            "These are the Top 5 Sandwiches on the platform",
+                            style={"text-align": "center", "color": "white"},
+                        ),
+                    ),
+                    dbc.Row(
+                        [divs[0]],
+                        style={"display": "flex", "justify-content": "center"},
+                    ),
+                    dbc.Row(
+                        [divs[1], divs[2]],
+                        style={"display": "flex", "justify-content": "center"},
+                    ),
+                    dbc.Row(
+                        [divs[3], divs[4]],
+                        style={"display": "flex", "justify-content": "center"},
+                    ),
+                ]
+            )
         ],
         style={
-            # "display": "flex",
-            # "justify-content": "center",
-            # "align-items": "center",
-            # "border": "black solid 2px",
-            # "border-radius": "20px",
+            "font-family": "'Helvetica Neue', Helvetica, Arial, sans-serif",
         },
     )
 
