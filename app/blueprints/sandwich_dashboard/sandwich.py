@@ -10,5 +10,6 @@ sandwich_dashboard_bp = Blueprint(
 
 @sandwich_dashboard_bp.route("/sandwich/")
 def sandwich() -> html:
-    # return render_template("sandwich-dashboard.html")
-    abort(501)
+    """Dashboard showing sandwich name, description, pie chart of volume, and stock price history"""
+
+    return render_template("sandwich-dashboard.html")
