@@ -6,7 +6,7 @@ sys.path.append("../")
 from server.models import Sandwich
 
 
-def draw_pie_chart(
+def plot_pie_chart(
     sandwich: Sandwich,
     id: str | None = "",
     height: int | None = 300,

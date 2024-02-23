@@ -2,7 +2,7 @@ from dash import Dash, html, dcc, Input, Output, callback
 import dash_bootstrap_components as dbc
 from plotly import graph_objects as go
 from datetime import datetime
-from dash_apps.components.plot_candle_data import plot_candle_data
+from dash_apps.components import plot_candle_data
 import sys
 from typing import List
 
@@ -19,8 +19,6 @@ def generate_sandwiches() -> List[Sandwich]:
     sandwich1 = Sandwich(
         name="KFC's Double Booster",
         price_history=Price_history.generate_history(start, end),
-        volume=2000,
-        on_sale=500,
     )
 
     sandwich2 = Sandwich(
@@ -56,7 +54,7 @@ def sandwich_div(
             #     style={"align-text": "center", "color": "white"},
             #     id="sandwich-1",
             # ),
-            plot_candle_data(sandwich, intervals="week", height=height, width=width),
+            plot_candle_data(sandwich, intervals="day", height=height, width=width),
             html.Div(id=f"{sandwich.name}-redirect-div"),
         ],
         style={

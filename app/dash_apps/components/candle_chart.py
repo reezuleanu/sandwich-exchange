@@ -44,6 +44,7 @@ def plot_candle_data(
             "data": [go.Candlestick(intervals)],
             "layout": go.Layout(
                 title=sandwich.name,
+                # title="Stock Price History",
                 xaxis=dict(title="Date"),
                 yaxis=dict(title="Price"),
                 plot_bgcolor="#181a1f",
