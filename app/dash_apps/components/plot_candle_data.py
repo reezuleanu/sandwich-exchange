@@ -37,8 +37,8 @@ def plot_candle_data(
         case "week":
             intervals = sandwich.price_history.by_week()
 
-    # define layout with data
-    layout = dcc.Graph(
+    # define graph with data
+    graph = dcc.Graph(
         id=id,
         figure={
             "data": [go.Candlestick(intervals)],
@@ -55,4 +55,4 @@ def plot_candle_data(
         },
     )
 
-    return layout
+    return graph

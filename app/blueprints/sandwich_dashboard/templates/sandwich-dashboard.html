@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{which}} Sandwich Dashboard</title>
+    <title>{{sandwich_name}} Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body style="background-color: #181a1f;">
     <header style="background-color: #22252f; height: 100px; display: flex;align-items: center;">
-        <div style="color: #f0b90b; font-size: 40px; margin-left: 20px;">
-            🥪 SANDWICH EXCHANGE
+        <div style="font-size: 40px; margin-left: 20px;">
+            <a href="/" style="text-decoration: none;color: #f0b90b;">🥪 SANDWICH EXCHANGE</a>
+        </div>
+        <div style="color: white; font-size: 24px;  margin-right: auto; padding-left: 50px;">
+            <a href="/sandwiches/" style="text-decoration: none; color: white;">Stocks</a>
+            <a href="/about/" style="text-decoration: none; color: white;padding: 20px;">About</a>
         </div>
         <div style="background-color: #181a1f; color: #3d4252; margin-left: auto; width: 300px; height: 35px; border-radius: 12px; display: flex;align-items: center;justify-content: center;">
             Search
@@ -34,12 +38,15 @@
     <div class="container" style ="margin-top: 40px; color: white;">
         <div class="row">
             <div class="col-9" style="background-color: #22252f;border-radius: 20px; padding: 20px;">
-            <h1>Sandwich name</h1>
-            <p></p>
-            <h5>Lorem ipsum is placeholder text commonly used in the graphic, print, and publishing industries for previewing layouts and visual mockups.</h5>
+            <h1>{{sandwich_name}}</h1>
+            {% if sandwich_description: %}
+            <h5 style="padding-top: 40px;">{{sandwich_description}}</h5>
+            {% else: %}
+            <h5 style="padding-top: 40px;">No description available.</h5>
+            {% endif %}
         </div>
-            <div class="col-3" style="background-color: #22252f;border-radius: 20px; padding: 20px;">
-                Pie chart goes here
+            <div class="col-3" style="background-color: #22252f;border-radius: 20px; padding: 20px;display: flex;justify-content: center;">
+                <iframe src = "/dash/piechart/" height = 300px scrolling = "no" ></iframe>
             </div>
         </div>
         <div class="row" style="background-color: #22252f;border-radius: 20px;padding: 20px; margin-top: 20px;">

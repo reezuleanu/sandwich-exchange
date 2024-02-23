@@ -19,6 +19,8 @@ def generate_sandwiches() -> List[Sandwich]:
     sandwich1 = Sandwich(
         name="KFC's Double Booster",
         price_history=Price_history.generate_history(start, end),
+        volume=2000,
+        on_sale=500,
     )
 
     sandwich2 = Sandwich(
