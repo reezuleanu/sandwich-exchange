@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
-from database import Database
-from models import Sandwich
+from .routes import index_r, sandwiches_r
 
 app = FastAPI()
-db = Database()
+
+app.include_router(index_r)
+app.include_router(sandwiches_r)

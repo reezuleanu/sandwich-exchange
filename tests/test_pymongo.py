@@ -1,13 +1,12 @@
-import sys
-
-# sys.path.append("../")
 from server.database import Database
-from server.models import Sandwich
+from server.models import Sandwich, Price_history
+from datetime import datetime
 
 
 sandwich = Sandwich(
     name="Test Sandwich",
     description="this is just a test sandwich",
+    price_history=Price_history.generate_history(datetime(2020, 1, 1), datetime.now()),
     volume=5000,
     on_sale=4000,
 )
@@ -41,11 +40,10 @@ def test_update_sandwich_by_id() -> None:
 
 def test_query_database_by_name() -> None:
     query = db.search_sandwiches_by_name(sandwich.name)
-    assert query is not None
-    result = Sandwich(**query[0])
-    assert result.name == sandwich.name
+    assert query[0] is not None
+
     assert query[0]["_id"] == sandwich_id
-    assert result.price == sandwich.price
+    assert query[0]["name"] == sandwich.name
 
 
 def test_get_sandwich_by_name() -> None:

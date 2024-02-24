@@ -1,8 +1,11 @@
 from __future__ import annotations
+from typing_extensions import Literal
 from pydantic import BaseModel
 from datetime import datetime, timedelta
-from typing import List
+from typing import Any, Callable, List
 from random import randint, choice
+
+from pydantic_core import PydanticUndefined
 
 
 def adjust(self, intervals: str, cutoff: int) -> dict:

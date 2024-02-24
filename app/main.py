@@ -6,6 +6,7 @@ from blueprints import index_bp, sandwich_dashboard_bp, error_bp
 from dash_apps.app_piechart import setup_piechart
 from dash_apps.app_candlechart import setup_candlechart
 from dash_apps.components import plot_candle_data
+import requests
 
 sys.path.append("../")
 
@@ -25,15 +26,12 @@ dash_top_5 = Dash(server=app, url_base_pathname="/dash/sandwiches/")
 dash_piechart = Dash(server=app, url_base_pathname="/dash/piechart/")
 dash_candlechart = Dash(server=app, url_base_pathname="/dash/candlechart/")
 
-start = datetime(2020, 1, 1)
-end = datetime.now()
 
 sand = Sandwich(
-    name="KFC's Double Booster",
-    price_history=Price_history.generate_history(start, end),
-    volume=2000,
-    on_sale=500,
+    **requests.get("http://127.0.0.1:2727/sandwiches/65da190fce06aadd38ff8eba").json()
 )
+sand.volume = 2000
+sand.on_sale = 1500
 
 
 dash_piechart.layout = setup_piechart(
@@ -42,7 +40,6 @@ dash_piechart.layout = setup_piechart(
 
 dash_candlechart.layout = setup_candlechart(
     dash_candlechart,
-    sand,
     width=1300,
     height=400,
 )

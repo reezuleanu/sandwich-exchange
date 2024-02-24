@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from pymongo import MongoClient, cursor
 from dotenv import load_dotenv
 from os import getenv
 from .models import Sandwich
@@ -40,48 +40,52 @@ class Database:
         else:
             return False
 
-    def get_sandwich_by_id(self, id: ObjectId) -> Sandwich:
+    def get_sandwich_by_id(self, sandwich_id: str) -> Sandwich:
         """Get sandwich data via database ID
 
         Args:
-            id (ObjectId): ID in database
+            sandwich_id (str): ID in database
 
         Returns:
             Sandwich: sandwich data
         """
-        query = self.db.sandwiches.find_one({"_id": id})
+        query = self.db.sandwiches.find_one({"_id": ObjectId(sandwich_id)})
         if query is not None:
             return Sandwich(**query)
         else:
             return None
 
-    def delete_sandwich_by_id(self, id: ObjectId) -> bool:
+    def delete_sandwich_by_id(self, sandwich_id: str) -> bool:
         """Delete sandwich data from database via ID
 
         Args:
-            id (ObjectId): Database ID
+            sandwich_id (str): Database ID
 
         Returns:
             bool: return code
         """
-        request = self.db.sandwiches.delete_one({"_id": id})
+
+        if self.db.sandwiches.find_one({"_id": ObjectId(sandwich_id)}) is None:
+            return False
+
+        request = self.db.sandwiches.delete_one({"_id": ObjectId(sandwich_id)})
         if request.acknowledged == 1:
             return True
         else:
             return False
 
-    def update_sandwich_by_id(self, id: ObjectId, new_sandwich: Sandwich) -> bool:
+    def update_sandwich_by_id(self, sandwich_id: str, new_sandwich: Sandwich) -> bool:
         """Update sandwich via ID
 
         Args:
-            id (ObjectId): database id
+            sandwich_id (str): database id
             new_sandwich(Sandwich): new sandwich data
 
         Returns:
             bool: return code
         """
         request = self.db.sandwiches.update_one(
-            {"_id": id}, {"$set": {**new_sandwich.model_dump()}}
+            {"_id": ObjectId(sandwich_id)}, {"$set": {**new_sandwich.model_dump()}}
         )
         if request.acknowledged == 1:
             return True
@@ -95,16 +99,16 @@ class Database:
             list[Sandwich]: sandwiches
         """
 
+        # todo make this sorted
         query = self.db.sandwiches.find({})
         return query
 
-    def search_sandwiches_by_name(self, sandwich_name: str) -> list[Sandwich]:
+    def search_sandwiches_by_name(self, sandwich_name: str) -> cursor:
         """Query the database by name (not case sensitive, not exact)
 
         Returns:
-            list[Sandwich]: results
+            cursor: results
         """
 
-        # todo learn to convert cursor to list of sandwiches
-        query = self.db.sandwiches.find({"name": sandwich_name})
+        query = self.db.sandwiches.find({"name": sandwich_name}, {"name": 1})
         return query
