@@ -1,6 +1,6 @@
 from typing import Any, Dict
 from pydantic import BaseModel
-from price_history import Price_history
+from .price_history import Price_history
 from datetime import datetime
 
 

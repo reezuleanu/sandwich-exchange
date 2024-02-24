@@ -20,6 +20,7 @@ def setup_candlechart(
         "border-radius": "5px",
         "background-color": "#22252f",
         "border": "0",
+        "cursor": "pointer",
     }
 
     div = html.Div(
