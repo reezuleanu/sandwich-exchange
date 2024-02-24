@@ -1,15 +1,21 @@
 from .components import plot_pie_chart
-from dash import html
+from dash import html, Dash, Input, Output, dcc
 import sys
+import requests
 
 sys.path.append("../")
 from server.models import Sandwich
 
 
-def setup_piechart(sandwich: Sandwich, user_owned: int | None = 0) -> html.Div:
+def setup_piechart(app: Dash, user_owned: int | None = 0) -> html.Div:
 
     layout = html.Div(
-        [plot_pie_chart(sandwich=sandwich, user_owned=user_owned)],
+        [
+            dcc.Input(
+                id="sandwich_id", value="initial value", style={"display": "none"}
+            ),
+            dcc.Location(id="url"),
+        ],
         style={
             #     "background-color": "#22252f",
             "display": "flex",
@@ -21,6 +27,23 @@ def setup_piechart(sandwich: Sandwich, user_owned: int | None = 0) -> html.Div:
             #     "width": f"{410}px",
             #     "margin": "10px",
         },
+        id="piechart",
     )
+
+    # get sandwich id from url
+    @app.callback(Output("sandwich_id", "value"), [Input("url", "pathname")])
+    def set_sandwich_id(url_id: str) -> str:
+        sandwich_id = url_id.split("/")[-1]
+
+        return sandwich_id
+
+    # draw plot based on sandwich id
+    @app.callback(Output("piechart", "children"), [Input("sandwich_id", "value")])
+    def plot_draw(sandwich_id: str) -> dcc.Graph:
+        sandwich = Sandwich(
+            **requests.get(f"http://127.0.0.1:2727/sandwiches/{sandwich_id}").json()
+        )
+
+        return plot_pie_chart(sandwich)
 
     return layout
