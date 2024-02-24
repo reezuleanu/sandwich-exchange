@@ -92,7 +92,7 @@ class Database:
         else:
             return False
 
-    def get_all_sandwiches(self) -> list[Sandwich]:
+    def get_all_sandwiches(self) -> cursor:
         """Get all sandwiches from the database
 
         Returns:
@@ -100,7 +100,7 @@ class Database:
         """
 
         # todo make this sorted
-        query = self.db.sandwiches.find({})
+        query = self.db.sandwiches.find({}, {"name": 1})
         return query
 
     def search_sandwiches_by_name(self, sandwich_name: str) -> cursor:

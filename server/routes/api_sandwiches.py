@@ -92,3 +92,20 @@ def find_sandwich_by_name(search: str) -> dict:
         response[str(sandwich["_id"])] = sandwich["name"]
 
     return response
+
+
+@sandwiches_r.get("/sandwich/all")
+def get_all_sandwiches() -> dict:
+    """Api call that returns all sandwich id's and their name from the database"""
+    query = db.get_all_sandwiches()
+    if query is None:
+        raise HTTPException(404)
+
+    # turn cursor into a dictionary
+    # the key is the id
+    # the value is the name
+    response = {}
+    for sandwich in query:
+        response[str(sandwich["_id"])] = sandwich["name"]
+
+    return response

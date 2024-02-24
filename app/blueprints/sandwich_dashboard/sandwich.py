@@ -29,10 +29,3 @@ def sandwich_dashboard(sandwich_id: str) -> html:
         sandwich_description=sandwich.description,
         sandwich_id=sandwich_id,
     )
-
-
-@sandwich_dashboard_bp.route("/sandwiches/")
-def sandwich_list() -> html:
-    """List all sandwiches in a list"""
-
-    abort(501)
