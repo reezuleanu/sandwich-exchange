@@ -92,15 +92,20 @@ class Database:
         else:
             return False
 
-    def get_all_sandwiches(self) -> cursor:
+    def get_all_sandwiches(self, limit: int | None = 0) -> cursor:
         """Get all sandwiches from the database
 
+        Args:
+            limit (int | None, optional): Optional results limit. Defaults to 0.
+
         Returns:
-            list[Sandwich]: sandwiches
+            cursor: results
         """
 
         # todo make this sorted
-        query = self.db.sandwiches.find({}, {"name": 1})
+        query = (
+            self.db.sandwiches.find({}, {"name": 1}).sort({"price": -1}).limit(limit)
+        )
         return query
 
     def search_sandwiches_by_name(self, sandwich_name: str) -> cursor:

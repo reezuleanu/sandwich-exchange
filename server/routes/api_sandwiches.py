@@ -109,3 +109,21 @@ def get_all_sandwiches() -> dict:
         response[str(sandwich["_id"])] = sandwich["name"]
 
     return response
+
+
+@sandwiches_r.get("/sandwich/top5")
+def get_top5() -> list[Sandwich]:
+    """Function used in the top 5 sandwiches dash app. Returns a list of the top 5 sandwiches
+
+    Returns:
+        list[Sandwich]: the top 5 sandwiches
+    """
+
+    query = db.get_all_sandwiches(5)
+    if query is None:
+        raise HTTPException(404)
+
+    # convert cursor of json to list of sandwiches
+    sandwich_list = []
+    for sandwich in query:
+        sandwich_list.append(Sandwich(**sandwich))
