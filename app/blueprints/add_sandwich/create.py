@@ -42,7 +42,41 @@ def modify_sandwich() -> html:
         return render_template("modify.html")
 
 
+# initial delete form endpoint
+# here you only enter the sandwich id
+# @create_bp.route("/delete_sandwich/")
+# def request_delete_sandwich():
+#     return render_template("delete.html")
+
+
+# deletion confirmation endpoint
+# here you enter the sandwich name to confirm deletion
+# if good, it deletes the sandwich
 @create_bp.route("/delete_sandwich/", methods=["GET", "POST"])
 def delete_sandwich() -> html:
+    sandwich_id = request.args.get("sandwich_id")
     if request.method == "GET":
-        return render_template("delete.html")
+        if sandwich_id == None:
+            return render_template("delete.html")
+        sandwich_name = api.get_sandwich_by_id(sandwich_id).name
+        return render_template(
+            "delete.html",
+            sandwich_id=sandwich_id,
+            message=f'You are about to delete "{sandwich_name}" from the database. Please retype "{sandwich_name}" to confirm',
+            color="red",
+        )
+    if request.method == "POST":
+        sandwich_name = api.get_sandwich_by_id(sandwich_id).name
+        if sandwich_name == request.form["confirmation"]:
+            if api.delete_sandwich(sandwich_id):
+                return render_template(
+                    "delete.html",
+                    message="Sandwich Deleted Successfully",
+                    color="green",
+                )
+            else:
+                return render_template(
+                    "delete.html",
+                    message="Sandwich could not be deleted : (",
+                    color="red",
+                )
