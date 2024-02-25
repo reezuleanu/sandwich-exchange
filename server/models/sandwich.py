@@ -68,6 +68,7 @@ class Sandwich(BaseModel):
             warnings=warnings,
         )
         d["price"] = self.price
-        for i in range(len(d["price_history"]["x"])):
-            d["price_history"]["x"][i] = d["price_history"]["x"][i].isoformat()
+        if self.price_history is not None:
+            for i in range(len(d["price_history"]["x"])):
+                d["price_history"]["x"][i] = d["price_history"]["x"][i].isoformat()
         return d

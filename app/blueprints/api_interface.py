@@ -34,7 +34,8 @@ class API:
         return response.json()
 
     def post_sandwich(self, sandwich: Sandwich) -> bool:
-        response = requests.post(f"{self.url}sandwich", json={sandwich.model_dump()})
+
+        response = requests.post(f"{self.url}sandwich/", json={**sandwich.model_dump()})
 
         if response.status_code == 200:
             return True
