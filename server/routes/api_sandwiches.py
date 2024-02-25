@@ -77,9 +77,6 @@ def delete_sandwich(sandwich_id: str) -> dict:
 def find_sandwich_by_name(search: str) -> dict:
     """Api call that queries the database for sandwiches by name"""
 
-    # todo make a name index
-    # todo make searches case insensitive and non exact
-    # todo make it sort by price
     query = db.search_sandwiches_by_name(search)
     if query is None:
         raise HTTPException(404)

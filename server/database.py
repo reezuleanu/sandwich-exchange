@@ -1,4 +1,4 @@
-from pymongo import MongoClient, cursor
+from pymongo import MongoClient, cursor, TEXT, collation
 from dotenv import load_dotenv
 from os import getenv
 from .models import Sandwich
@@ -14,6 +14,7 @@ class Database:
         self.client = MongoClient(
             getenv("PYMONGO_DATABASE_HOST"), port=int(getenv("PYMONGO_DATABASE_PORT"))
         )
+        # self.client = MongoClient(host="127.0.0.1", port=27017)
         self.db = self.client.exchange
 
     # sandwich CRUD
@@ -106,8 +107,12 @@ class Database:
         Returns:
             cursor: results
         """
-
-        query = self.db.sandwiches.find({"name": sandwich_name}, {"name": 1})
+        self.db.sandwiches.create_index(
+            (["name", TEXT]), collation=collation.Collation(locale="en", strength=2)
+        )
+        query = self.db.sandwiches.find(
+            {"name": {"$regex": sandwich_name, "$options": "i"}}, {"name": 1}
+        )
         return query
 
     def get_top_5(self) -> cursor:

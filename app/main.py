@@ -14,6 +14,12 @@ import sys
 # this is purgatory
 sys.path.append("../")
 
+# load .env
+from dotenv import load_dotenv
+from os import getenv
+
+load_dotenv("../.env")
+
 
 # initiate server
 app = Flask("Sandwich-Exchange-Server")
@@ -45,5 +51,4 @@ dash_candlechart.layout = setup_candlechart(
 
 # start server
 if __name__ == "__main__":
-    # app.run(host="192.168.0.223", port=80, debug=True)
-    app.run(debug=True)
+    app.run(host=getenv("FLASK_HOST"), port=int(getenv("FLASK_PORT")), debug=True)
