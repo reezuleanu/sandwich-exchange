@@ -2,7 +2,7 @@ from dash import Dash
 from flask import Flask
 
 # blueprint imports
-from blueprints import index_bp, sandwich_dashboard_bp, error_bp, search_bp
+from blueprints import index_bp, sandwich_dashboard_bp, error_bp, search_bp, about_bp
 
 # dash app imports
 from dash_apps.app_top5 import setup_layout
@@ -29,6 +29,7 @@ app.register_blueprint(index_bp)  # homepage
 app.register_blueprint(sandwich_dashboard_bp)  # sandwich dashboard
 app.register_blueprint(error_bp)  # html error handler
 app.register_blueprint(search_bp)  # everything related to search functionalities
+app.register_blueprint(about_bp)  # small page about my vision for the platform
 
 # initiate dash apps
 dash_top_5 = Dash(server=app, url_base_pathname="/dash/sandwiches/")
