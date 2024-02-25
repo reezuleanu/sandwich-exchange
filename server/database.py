@@ -107,12 +107,17 @@ class Database:
         Returns:
             cursor: results
         """
+
+        # create index for name, inexact
         self.db.sandwiches.create_index(
             (["name", TEXT]), collation=collation.Collation(locale="en", strength=2)
         )
+
+        # query for name, case insensitive
         query = self.db.sandwiches.find(
             {"name": {"$regex": sandwich_name, "$options": "i"}}, {"name": 1}
         )
+
         return query
 
     def get_top_5(self) -> cursor:

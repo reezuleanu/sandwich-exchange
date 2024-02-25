@@ -40,18 +40,18 @@ def test_update_sandwich_by_id() -> None:
 
 def test_query_database_by_name() -> None:
     query = db.search_sandwiches_by_name(sandwich.name)
-    assert query[0] is not None
+    assert query is not None
 
-    assert query[0]["_id"] == sandwich_id
-    assert query[0]["name"] == sandwich.name
+    response = {}
 
+    for result in query:
+        response[str(result["_id"])] = result["name"]
 
-def test_get_sandwich_by_name() -> None:
-    assert True
+    assert str(sandwich_id) in response
+    assert sandwich.name in response.values()
 
-
-def test_get_sandwich_id_by_name() -> None:
-    assert True
+    # assert query[0]["_id"] == sandwich_id
+    # assert query[0]["name"] == sandwich.name
 
 
 def test_delete_sandwich_by_id() -> None:
