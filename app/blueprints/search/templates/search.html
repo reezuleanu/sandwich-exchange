@@ -52,11 +52,11 @@
     </div>
     <div class="container" id="main-container" style ="background-color: #22252f; border-radius: 20px; margin-top: 20px; color: white;">
         <div class="row-6" style="font-size: 32px; text-align: left; padding-top: 20px; padding-left: 50px;">
-            <h1>🥪 Sandwich Stocks 🥪</h1>
+            <h1>Search results for {{sandwich_name}}</h1>
         </div>
         <div style="padding: 20px;">
-            {% for stock in stocks: %}
-            <div><h4 style="padding: 5px;"><a href="../sandwich/{{stock}}" style="text-decoration: none;">{{stocks[stock]}}</a></h4></div>
+            {% for result in results: %}
+            <div><h4 style="padding: 5px;"><a href="../../sandwich/{{result}}" style="text-decoration: none;">{{results[result]}}</a></h4></div>
             {% endfor %}
         </div>
     </div>

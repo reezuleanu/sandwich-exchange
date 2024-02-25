@@ -1,4 +1,4 @@
-from flask import Blueprint, abort, render_template
+from flask import Blueprint, abort, render_template, request
 import html
 import requests
 from ..api_interface import API
@@ -15,13 +15,16 @@ def get_all_sandwiches() -> html:
     return render_template("stonks.html", stocks=stocks)
 
 
-@search_bp.route("/search/<sandwich_name>/")
-def find_sandwich(sandwich_name: str) -> html:
+@search_bp.route("/search/")
+def find_sandwich() -> html:
     """Search the database for a specific sandwich by name
 
     Args:
         sandwich_name (str): sandwich name (not case sensitive, not exact)
 
     """
+    sandwich_name = request.args.get("search")
 
-    abort(501)
+    results = api.get_sandwich_by_name(sandwich_name)
+
+    return render_template("search.html", results=results, sandwich_name=sandwich_name)

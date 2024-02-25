@@ -29,12 +29,12 @@ class API:
             dict[id,sandwich name]: query results
         """
 
-        response = requests.get(f"{self.url}/sandwiches/search/{sandwich_name}")
+        response = requests.get(f"{self.url}sandwiches/search/{sandwich_name}")
 
         return response.json()
 
     def post_sandwich(self, sandwich: Sandwich) -> bool:
-        response = requests.post(f"{self.url}/sandwich", json={sandwich.model_dump()})
+        response = requests.post(f"{self.url}sandwich", json={sandwich.model_dump()})
 
         if response.status_code == 200:
             return True
@@ -53,7 +53,7 @@ class API:
         """
 
         response = requests.put(
-            f"{self.url}/sandwich/{sandwich_id}", json={**sandwich.model_dump()}
+            f"{self.url}sandwich/{sandwich_id}", json={**sandwich.model_dump()}
         )
         if response.status_code == 200:
             return True
@@ -70,7 +70,7 @@ class API:
             bool: return code
         """
 
-        response = requests.delete(f"{self.url}/sandwich/{sandwich_id}")
+        response = requests.delete(f"{self.url}sandwich/{sandwich_id}")
 
         if response.status_code == 200:
             return True
