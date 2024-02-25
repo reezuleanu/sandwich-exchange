@@ -1,13 +1,17 @@
 import requests
 from server.models import Sandwich
 from flask import abort
+from dotenv import load_dotenv
+from os import getenv
 
 
 class API:
     """Class that serves as an interface between the server and the web app"""
 
     def __init__(self) -> None:
-        self.url = "http://127.0.0.1:2727/"
+        # self.url = "http://127.0.0.1:2727/"
+        load_dotenv("../.env")
+        self.url = str(getenv("FASTAPI_URL"))
 
     def get_sandwich_by_id(self, sandwich_id: str) -> Sandwich:
         """get sandwich from the api via id"""

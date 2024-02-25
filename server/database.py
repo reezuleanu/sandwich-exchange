@@ -7,13 +7,6 @@ from bson import ObjectId
 load_dotenv("../.env")
 
 
-# client = MongoClient(
-#     getenv("PYMONGO_DATABASE_HOST"), port=int(getenv("PYMONGO_DATABASE_PORT"))
-# )
-
-# db = client.exchange
-
-
 class Database:
     """MongoDB database interface"""
 
