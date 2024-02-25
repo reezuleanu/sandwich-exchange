@@ -1,8 +1,1 @@
-import sys
-from datetime import datetime, timedelta
-from time import time
-from random import randint, choice
-
-sys.path.append("../")
-
-from server.models import Sandwich, Price_history
+"""this was meant to be a price simulator, which would append to the available price history new data, but i did not have time to do this (yet)"""

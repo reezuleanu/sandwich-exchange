@@ -3,6 +3,8 @@ import html
 import requests
 from ..api_interface import API
 
+# blueprint relating to /stonks/ endpoint which displays all sandwiches
+# and /search/ endpoint which displays sandwiches based on name query
 search_bp = Blueprint("search-blueprint", __name__, template_folder="templates")
 api = API()
 

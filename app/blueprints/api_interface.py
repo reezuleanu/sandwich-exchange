@@ -34,6 +34,7 @@ class API:
         return response.json()
 
     def post_sandwich(self, sandwich: Sandwich) -> bool:
+        """Upload sandwich data to the api"""
 
         response = requests.post(f"{self.url}sandwich/", json={**sandwich.model_dump()})
 
