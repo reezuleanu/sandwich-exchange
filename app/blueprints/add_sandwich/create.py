@@ -36,11 +36,13 @@ def create_sandwich() -> html:
             )
 
 
-@create_bp.route("/modify_sandwich/")
+@create_bp.route("/modify_sandwich/", methods=["GET", "POST"])
 def modify_sandwich() -> html:
-    abort(501)
+    if request.method == "GET":
+        return render_template("modify.html")
 
 
-@create_bp.route("/delete_sandwich/")
+@create_bp.route("/delete_sandwich/", methods=["GET", "POST"])
 def delete_sandwich() -> html:
-    abort(501)
+    if request.method == "GET":
+        return render_template("delete.html")

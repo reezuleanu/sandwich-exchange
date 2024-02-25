@@ -27,7 +27,7 @@ def sandwich_div(
             #     id="sandwich-1",
             # ),
             plot_candle_data(sandwich, intervals="day", height=height, width=width),
-            html.Div(id=f"{sandwich.name}-redirect-div"),
+            # html.Div(id=f"{sandwich.name}-redirect-div"),
         ],
         style={
             "background-color": "#22252f",
@@ -40,7 +40,7 @@ def sandwich_div(
             "width": f"{width+50}px",
             "margin": "10px",
         },
-        id=f"{sandwich.name}",
+        # id=f"{sandwich.name}",
     )
 
     return div
