@@ -10,7 +10,7 @@ sandwiches_r = APIRouter()
 db = Database()
 
 
-@sandwiches_r.get("/sandwiches/{sandwich_id}")
+@sandwiches_r.get("/sandwich/{sandwich_id}")
 def get_sandwich_by_id(sandwich_id: str) -> Sandwich:
     """Api call to get sandwich data by id
 
@@ -31,7 +31,7 @@ def get_sandwich_by_id(sandwich_id: str) -> Sandwich:
     return query
 
 
-@sandwiches_r.post("/sandwiches/")
+@sandwiches_r.post("/sandwich")
 def add_sandwich(sandwich: Sandwich) -> dict:
     """Api call that creates sandwich"""
 
@@ -48,7 +48,7 @@ def add_sandwich(sandwich: Sandwich) -> dict:
     return {"response": "sandwich added successfully"}
 
 
-@sandwiches_r.put("/sandwiches/{sandwich_id}")
+@sandwiches_r.put("/sandwich/{sandwich_id}")
 def update_sandwich(sandwich_id: str, sandwich: Sandwich) -> dict:
 
     query = db.get_sandwich_by_id(sandwich_id)
@@ -61,7 +61,7 @@ def update_sandwich(sandwich_id: str, sandwich: Sandwich) -> dict:
     return {"response": "sandwich updated successfully"}
 
 
-@sandwiches_r.delete("/sandwiches/{sandwich_id}")
+@sandwiches_r.delete("/sandwich/{sandwich_id}")
 def delete_sandwich(sandwich_id: str) -> dict:
     """Api call that deletes sandwich by id"""
 
@@ -73,7 +73,7 @@ def delete_sandwich(sandwich_id: str) -> dict:
     return {"response": "sandwich deleted successfully"}
 
 
-@sandwiches_r.get("/sandwiches/search/")
+@sandwiches_r.get("/sandwiches/search/{search}")
 def find_sandwich_by_name(search: str) -> dict:
     """Api call that queries the database for sandwiches by name"""
 
@@ -94,9 +94,10 @@ def find_sandwich_by_name(search: str) -> dict:
     return response
 
 
-@sandwiches_r.get("/sandwich/all")
+@sandwiches_r.get("/sandwiches/all")
 def get_all_sandwiches() -> dict:
     """Api call that returns all sandwich id's and their name from the database"""
+
     query = db.get_all_sandwiches()
     if query is None:
         raise HTTPException(404)
@@ -111,7 +112,7 @@ def get_all_sandwiches() -> dict:
     return response
 
 
-@sandwiches_r.get("/sandwich/top5")
+@sandwiches_r.get("/sandwiches/top5")
 def get_top5() -> list[Sandwich]:
     """Function used in the top 5 sandwiches dash app. Returns a list of the top 5 sandwiches
 
@@ -119,11 +120,15 @@ def get_top5() -> list[Sandwich]:
         list[Sandwich]: the top 5 sandwiches
     """
 
-    query = db.get_all_sandwiches(5)
+    # get the id's of the top 5 sandwiches on the platform
+    query = db.get_top_5()
     if query is None:
         raise HTTPException(404)
 
-    # convert cursor of json to list of sandwiches
-    sandwich_list = []
+    # get the data for each of them and put it in a list
+    top5 = []
     for sandwich in query:
-        sandwich_list.append(Sandwich(**sandwich))
+        top5.append(get_sandwich_by_id(sandwich["_id"]))
+
+    # return the list
+    return top5

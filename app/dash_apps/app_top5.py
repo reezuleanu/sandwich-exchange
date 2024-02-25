@@ -4,41 +4,13 @@ from plotly import graph_objects as go
 from datetime import datetime
 from dash_apps.components import plot_candle_data
 import sys
-from typing import List
+import requests
 
 sys.path.append("../")
 from server.models import Sandwich, Price_history
+from blueprints.api_interface import API
 
-# ! THESE ARE PARAMETERS FOR GENERATING PRICE HISTORY, TO BE MOVED
-start = datetime(2020, 1, 1)
-end = datetime.now()
-
-
-# function to generate sandwiches before i fully implement the database in the app
-def generate_sandwiches() -> List[Sandwich]:
-    sandwich1 = Sandwich(
-        name="KFC's Double Booster",
-        price_history=Price_history.generate_history(start, end),
-    )
-
-    sandwich2 = Sandwich(
-        name="McDonald's McTasty",
-        price_history=Price_history.generate_history(start, end),
-    )
-
-    sandwich3 = Sandwich(
-        name="Wendy's Spicy Chicken Sandwich",
-        price_history=Price_history.generate_history(start, end),
-    )
-    sandwich4 = Sandwich(
-        name="Splatoon 3's Crab Trap Sandwich",
-        price_history=Price_history.generate_history(start, end),
-    )
-    sandwich5 = Sandwich(
-        name="Skibidi Toilet Sandwich",
-        price_history=Price_history.generate_history(start, end),
-    )
-    return [sandwich1, sandwich2, sandwich3, sandwich4, sandwich5]
+api = API()
 
 
 # function to generate an appropriate sandwich graph div for the app
@@ -77,7 +49,10 @@ def sandwich_div(
 # sandwich div generation ( first one is special so it's not part of the loop)
 
 divs = []
-sandwiches = generate_sandwiches()
+
+
+sandwiches = api.get_top_5()
+
 
 divs.append(sandwich_div(sandwiches[0], width=1000))
 
@@ -98,15 +73,15 @@ for sandwich in sandwiches[1::]:
     # rest of the sandwiches
     divs.append(sandwich_div(sandwich))
 
-    # @callback(
-    #     Output(f"{sandwich.name}-redirect-div", "children"),
-    #     [Input(sandwich.name, "n_clicks")],
-    # )
-    # def redirect_user(n_clicks):
-    #     if n_clicks > 0:
-    #         return dcc.Location(pathname="/", id="redirect")
-    #     else:
-    #         return 0
+# @callback(
+#     Output(f"{sandwich.name}-redirect-div", "children"),
+#     [Input(sandwich.name, "n_clicks")],
+# )
+# def redirect_user(n_clicks):
+#     if n_clicks > 0:
+#         return dcc.Location(pathname="/", id="redirect")
+#     else:
+#         return 0
 
 
 # generate app layout

@@ -6,6 +6,7 @@ import requests
 
 sys.path.append("../")
 from server.models import Sandwich
+from blueprints.api_interface import API
 
 """I spent way to long here and i pity whoever has to review this code. Here, have a sandwich for your troubles: 🥪"""
 
@@ -16,6 +17,8 @@ def setup_candlechart(
     width: int | None = 450,
     intervals: str | None = "hour",
 ) -> html.Div:
+
+    api = API()
 
     # css for interval buttons
     button_css = {
@@ -92,13 +95,14 @@ def setup_candlechart(
         prevent_initial_call=True,
     )
     def redraw(sandwich_id, clicks_quarters, clicks_hour, clicks_day, clicks_week):
+        """Countless hours went into perfecting this disaster"""
+
+        # get callback context
         ctx = callback_context
         button_id = ctx.triggered[0]["prop_id"].split(".")[0]
 
-        global sandwich
-        sandwich = Sandwich(
-            **requests.get(f"http://127.0.0.1:2727/sandwiches/{sandwich_id}").json()
-        )
+        # get sandwich data from api
+        sandwich = api.get_sandwich_by_id(sandwich_id)
 
         # check which button triggered the callback
         if button_id == "btn-quarters":

@@ -52,8 +52,8 @@
             <h1>🥪 Sandwich Stocks 🥪</h1>
         </div>
         <div style="padding: 20px;">
-            {% for stock in stocks.json(): %}
-            <div><h4 style="padding: 5px;"><a href="../sandwich/{{stock}}" style="text-decoration: none;">{{stocks.json()[stock]}}</a></h4></div>
+            {% for stock in stocks: %}
+            <div><h4 style="padding: 5px;"><a href="../sandwich/{{stock}}" style="text-decoration: none;">{{stocks[stock]}}</a></h4></div>
             {% endfor %}
         </div>
     </div>

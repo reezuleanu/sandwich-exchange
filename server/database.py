@@ -102,7 +102,6 @@ class Database:
             cursor: results
         """
 
-        # todo make this sorted
         query = (
             self.db.sandwiches.find({}, {"name": 1}).sort({"price": -1}).limit(limit)
         )
@@ -116,4 +115,15 @@ class Database:
         """
 
         query = self.db.sandwiches.find({"name": sandwich_name}, {"name": 1})
+        return query
+
+    def get_top_5(self) -> cursor:
+        """Get the top 5 documents based on price
+
+        Returns:
+            cursor: results
+        """
+
+        query = self.db.sandwiches.find({}).sort({"price": -1}).limit(5)
+
         return query

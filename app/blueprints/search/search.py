@@ -1,17 +1,17 @@
 from flask import Blueprint, abort, render_template
 import html
 import requests
+from ..api_interface import API
 
 search_bp = Blueprint("search-blueprint", __name__, template_folder="templates")
+api = API()
 
 
 @search_bp.route("/stonks/")
 def get_all_sandwiches() -> html:
     """Display all sandwiches in the database, from most expensive stocks to least expensive stocks"""
 
-    stocks = requests.get("http://127.0.0.1:2727/sandwich/all/")
-    if stocks.status_code != 200:
-        abort(500)
+    stocks = api.get_all_sandwiches()
     return render_template("stonks.html", stocks=stocks)
 
 

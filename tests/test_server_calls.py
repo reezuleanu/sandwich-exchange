@@ -16,12 +16,12 @@ sandwich = Sandwich(
 
 
 def test_post_sandwich() -> None:
-    response = requests.post(f"{api_url}/sandwiches/", json=sandwich.model_dump())
+    response = requests.post(f"{api_url}/sandwich/", json=sandwich.model_dump())
     assert response.status_code == 200
 
 
 def test_search_sandwiches():
-    response = requests.get(f"{api_url}/sandwiches/search/?search={sandwich.name}")
+    response = requests.get(f"{api_url}/sandwiches/search/{sandwich.name}")
 
     assert response.status_code == 200
     assert type(response.json()) is dict
@@ -33,7 +33,7 @@ def test_search_sandwiches():
 
 
 def test_get_sandwich_by_id() -> None:
-    response = requests.get(f"{api_url}/sandwiches/{id}")
+    response = requests.get(f"{api_url}/sandwich/{id}")
     assert response.status_code == 200
     result = Sandwich(**response.json())
     assert result.name == sandwich.name
@@ -50,14 +50,14 @@ def test_update_sandwich() -> None:
 
     # put request
     response = requests.put(
-        f"{api_url}/sandwiches/{id}", json=sandwich_modified.model_dump()
+        f"{api_url}/sandwich/{id}", json=sandwich_modified.model_dump()
     )
 
     assert response.status_code == 200
 
     # check database details
 
-    response = requests.get(f"{api_url}/sandwiches/{id}")
+    response = requests.get(f"{api_url}/sandwich/{id}")
     db_sandwich = Sandwich(**response.json())
 
     # check some values
@@ -67,8 +67,8 @@ def test_update_sandwich() -> None:
 
 
 def test_delete_sandwich() -> None:
-    response = requests.delete(f"{api_url}/sandwiches/{id}")
+    response = requests.delete(f"{api_url}/sandwich/{id}")
     assert response.status_code == 200
 
     # check the sandwich is actually gone
-    assert requests.get(f"{api_url}/sandwiches/{id}").status_code == 404
+    assert requests.get(f"{api_url}/sandwich/{id}").status_code == 404

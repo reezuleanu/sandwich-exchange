@@ -5,9 +5,12 @@ import requests
 
 sys.path.append("../")
 from server.models import Sandwich
+from blueprints.api_interface import API
 
 
 def setup_piechart(app: Dash, user_owned: int | None = 0) -> html.Div:
+
+    api = API()
 
     layout = html.Div(
         [
@@ -40,10 +43,7 @@ def setup_piechart(app: Dash, user_owned: int | None = 0) -> html.Div:
     # draw plot based on sandwich id
     @app.callback(Output("piechart", "children"), [Input("sandwich_id", "value")])
     def plot_draw(sandwich_id: str) -> dcc.Graph:
-        sandwich = Sandwich(
-            **requests.get(f"http://127.0.0.1:2727/sandwiches/{sandwich_id}").json()
-        )
-
+        sandwich = api.get_sandwich_by_id(sandwich_id)
         return plot_pie_chart(sandwich)
 
     return layout
