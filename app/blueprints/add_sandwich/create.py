@@ -19,9 +19,6 @@ def create_sandwich() -> html:
         sandwich = Sandwich(
             name=str(request.form["sandwich_name"]),
             description=str(request.form["sandwich_description"]),
-            # price_history=Price_history.generate_history(
-            #     datetime(2020, 1, 1), datetime.now()
-            # ),
             volume=int(request.form["total_volume"]),
             on_sale=int(request.form["on_sale"]),
         )
@@ -38,20 +35,38 @@ def create_sandwich() -> html:
 
 @create_bp.route("/modify_sandwich/", methods=["GET", "POST"])
 def modify_sandwich() -> html:
+    sandwich_id = request.args.get("sandwich_id")
     if request.method == "GET":
-        return render_template("modify.html")
+        if sandwich_id == None:
+            return render_template("modify.html")
+        sandwich_data = api.get_sandwich_by_id(sandwich_id)
+        return render_template(
+            "modify.html",
+            sandwich_id=sandwich_id,
+            sandwich=sandwich_data,
+            message='Modify the values you want to change, then hit "Modify Sandwich"',
+            color="#f0b90b",
+        )
+    if request.method == "POST":
+        sandwich_id = request.args.get("sandwich_id")
+        sandwich_modified = Sandwich(
+            name=request.form["sandwich_name"],
+            description=request.form["sandwich_description"],
+            price_history=api.get_sandwich_by_id(sandwich_id).price_history,
+            volume=int(request.form["sandwich_volume"]),
+            on_sale=int(request.form["sandwich_on_sale"]),
+        )
+
+        if api.update_sandwich(sandwich_id, sandwich_modified):
+            return render_template(
+                "modify.html", message="Sandwich Modified Successfully!", color="green"
+            )
+        else:
+            return render_template(
+                "modify.html", message="Sandwich could not be modified :(", color="red"
+            )
 
 
-# initial delete form endpoint
-# here you only enter the sandwich id
-# @create_bp.route("/delete_sandwich/")
-# def request_delete_sandwich():
-#     return render_template("delete.html")
-
-
-# deletion confirmation endpoint
-# here you enter the sandwich name to confirm deletion
-# if good, it deletes the sandwich
 @create_bp.route("/delete_sandwich/", methods=["GET", "POST"])
 def delete_sandwich() -> html:
     sandwich_id = request.args.get("sandwich_id")
@@ -77,6 +92,6 @@ def delete_sandwich() -> html:
             else:
                 return render_template(
                     "delete.html",
-                    message="Sandwich could not be deleted : (",
+                    message="Sandwich could not be deleted :(",
                     color="red",
                 )
