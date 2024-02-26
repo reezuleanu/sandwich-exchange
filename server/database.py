@@ -4,13 +4,12 @@ from os import getenv
 from .models import Sandwich
 from bson import ObjectId
 
-load_dotenv("../.env")
-
 
 class Database:
     """MongoDB database interface"""
 
     def __init__(self) -> None:
+        # load_dotenv("../.env")
         self.client = MongoClient(
             getenv("PYMONGO_DATABASE_HOST"), port=int(getenv("PYMONGO_DATABASE_PORT"))
         )

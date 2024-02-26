@@ -50,44 +50,45 @@ def sandwich_div(
 
 divs = []
 
+sandwiches = []
+# sandwiches = api.get_top_5()
 
-sandwiches = api.get_top_5()
+if len(sandwiches) == 5:
 
+    divs.append(sandwich_div(sandwiches[0], width=1000))
 
-divs.append(sandwich_div(sandwiches[0], width=1000))
+    # ! DISABLED CALLBACKS BECAUSE OF BUG WITH IFRAME
+    # @callback(
+    #     Output(f"{sandwiches[0].name}-redirect-div", "children"),
+    #     [Input(sandwiches[0].name, "n_clicks")],
+    # )
+    # def redirect_user(n_clicks):
+    #     if n_clicks > 0:
+    #         return dcc.Location(pathname="/", id="redirect")
+    #     else:
+    #         return 0
 
-# ! DISABLED CALLBACKS BECAUSE OF BUG WITH IFRAME
-# @callback(
-#     Output(f"{sandwiches[0].name}-redirect-div", "children"),
-#     [Input(sandwiches[0].name, "n_clicks")],
-# )
-# def redirect_user(n_clicks):
-#     if n_clicks > 0:
-#         return dcc.Location(pathname="/", id="redirect")
-#     else:
-#         return 0
+    for sandwich in sandwiches[1::]:
 
+        # rest of the sandwiches
+        divs.append(sandwich_div(sandwich))
 
-for sandwich in sandwiches[1::]:
-
-    # rest of the sandwiches
-    divs.append(sandwich_div(sandwich))
-
-# @callback(
-#     Output(f"{sandwich.name}-redirect-div", "children"),
-#     [Input(sandwich.name, "n_clicks")],
-# )
-# def redirect_user(n_clicks):
-#     if n_clicks > 0:
-#         return dcc.Location(pathname="/", id="redirect")
-#     else:
-#         return 0
+    # @callback(
+    #     Output(f"{sandwich.name}-redirect-div", "children"),
+    #     [Input(sandwich.name, "n_clicks")],
+    # )
+    # def redirect_user(n_clicks):
+    #     if n_clicks > 0:
+    #         return dcc.Location(pathname="/", id="redirect")
+    #     else:
+    #         return 0
 
 
 # generate app layout
 def setup_layout() -> html.Div:
     """Function which generates the layout for the Top 5 Sandwiches Dash app"""
-
+    if len(divs) == 0:
+        return html.Div("No data")
     layout = html.Div(
         [
             # tried using bootstrap, doesn't really work, maybe because of the iframe

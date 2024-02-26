@@ -10,7 +10,7 @@ class API:
 
     def __init__(self) -> None:
         # self.url = "http://127.0.0.1:2727/"
-        load_dotenv("../.env")
+        # load_dotenv("../.env")
         self.url = str(getenv("FASTAPI_URL"))
 
     def get_sandwich_by_id(self, sandwich_id: str) -> Sandwich:
