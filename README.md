@@ -49,6 +49,8 @@ will fix in the future
 
 - imaginile de docker copiaza tot repo ul pentru ca nu am pus toate fisierele comune separat, trebuie optimizat
 
+- erau multe locuri unde era mult mai usor sa folosesc javascript, dar am folosit python prin jinja2 pentru ca nu mai tin minte nimic despre javascript
+
 
 
 ### Ce nu am apucat sa fac (si s-ar putea sa fac in viitor):
@@ -59,6 +61,8 @@ majoritatea api urilor vazute de mine facute (ca cele de vreme). Nu am mai apuca
 
 - voiam sa fac si ceva cu useri in aplicatia web, sa te poti loga, sa ai un sold, sa poti cumpara si vinde actiuni de sendvis (abia acum realizez cat de ridicol suna), etc.
 Nu am mai apucat, dar mai sunt urme de aceasta idee in html, unde "Log in" e rendered daca nu are date despre utilizator
+
+- voiam sa fac un simulator pentru api care trecea prin fiecare istoric de preturi si daca era o diferenta intre data ultimului pret si data actuala, ar fi generat date pentru diferenta
 
 
 Categoric am uitat sa mai mentionez chestii. Orice e neclar, sunt mereu disponibil sa raspund.
