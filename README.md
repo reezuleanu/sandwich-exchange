@@ -1,7 +1,6 @@
-# sandwich-exchange
-A stock exchange for sandwiches. Nothing more needs to be said.
-
 # LINK: http://34.155.116.22/
+
+
 
 # Salut!
 
@@ -54,6 +53,8 @@ will fix in the future
 
 
 ### Ce nu am apucat sa fac (si s-ar putea sa fac in viitor):
+
+- testele necesita sa fie pornit api ul si o baza de date, asa ca ar fi dificil sa implementez CI si CD in conditia lor actuala, dar e ceva ce o sa fac probabil dupa ce mai organizez codul si structura repo ului
 
 - api ul este expus lumii, si am o clasa de token. Voiam sa folosesc o functie in folder ul dependencies care sa verifice token ul din fiecare api call,
 scopul era sa aibe aplicatie web un token, dar sa pot faci si alte token uri pentru api ca sa poata fi folosit si inafara aplicatiei web, asa cum sunt
