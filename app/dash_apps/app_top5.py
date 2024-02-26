@@ -50,8 +50,8 @@ def sandwich_div(
 
 divs = []
 
-sandwiches = []
-# sandwiches = api.get_top_5()
+# sandwiches = []
+sandwiches = api.get_top_5()
 
 if len(sandwiches) == 5:
 
