@@ -6,6 +6,7 @@ from server.models import Sandwich, Price_history
 
 
 def test_sandwich() -> None:
+    """Test basic sandwich model capabilities, like if the model dump contains the latest price"""
 
     sandwich = Sandwich(
         name="McDonald's McRib",
