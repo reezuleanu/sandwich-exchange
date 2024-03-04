@@ -42,7 +42,7 @@ sa fac sa fie fiecare grafic o aplicatie separata
 - aplicatia dash de top 5 se actualizeaza doar la pornirea serverului, deci daca apare un sendvis si mai tare, nu o sa apara pe prima pagina decat la restartarea serverului,
 will fix in the future
 
-- am am incercat sa folosesc bootstrap, dar nu am reusit in totalitate. Pe scurt, SITE UL NU ESTE UTILIZABIL PE ECRANE MAI MICI. 
+- am incercat sa folosesc bootstrap, dar nu am reusit in totalitate. Pe scurt, SITE UL NU ESTE UTILIZABIL PE ECRANE MAI MICI. 
 
 - tot css ul este inline
 
@@ -57,8 +57,8 @@ will fix in the future
 - testele necesita sa fie pornit api ul si o baza de date, asa ca ar fi dificil sa implementez CI si CD in conditia lor actuala, dar e ceva ce o sa fac probabil dupa ce mai organizez codul si structura repo ului
 
 - api ul este expus lumii, si am o clasa de token. Voiam sa folosesc o functie in folder ul dependencies care sa verifice token ul din fiecare api call,
-scopul era sa aibe aplicatie web un token, dar sa pot faci si alte token uri pentru api ca sa poata fi folosit si inafara aplicatiei web, asa cum sunt
-majoritatea api urilor vazute de mine facute (ca cele de vreme). Nu am mai apucat, acum doar accepta orice call
+scopul era sa aibe aplicatia web un token, dar sa poti face si alte token uri pentru api ca sa poata fi folosit si inafara aplicatiei web, asa cum sunt
+majoritatea api urilor vazute de mine (ca cele de vreme). Nu am mai apucat, acum doar accepta orice call
 
 - voiam sa fac si ceva cu useri in aplicatia web, sa te poti loga, sa ai un sold, sa poti cumpara si vinde actiuni de sendvis (abia acum realizez cat de ridicol suna), etc.
 Nu am mai apucat, dar mai sunt urme de aceasta idee in html, unde "Log in" e rendered daca nu are date despre utilizator
